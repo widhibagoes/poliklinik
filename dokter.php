@@ -1,4 +1,19 @@
 <?php
+    if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
+    if (!isset($_SESSION['username'])) {
+        // Jika pengguna sudah login, tampilkan tombol "Logout"
+        header("Location: index.php?page=loginUser");
+        exit;
+    ?>
+    
+    <?php
+    } else {
+        // Jika pengguna belum login, tampilkan tombol "Login"
+    ?>
+    <?php
     include 'koneksi.php';
 
     if (isset($_POST['simpan'])) {
@@ -36,14 +51,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Bootstrap offline -->
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">  
-    
-    <title>Poliklinik</title>   <!--Judul Halaman-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">      
+    <title>Poliklinik</title>
 </head>
 <body>
+    <h2>Dokter</h2>
+    <br>
     <div class = "container">  
         <!--Form Input Data-->
 
@@ -70,21 +83,27 @@
                 <label for="inputNama" class="form-label fw-bold">
                     Nama
                 </label>
-                <input type="text" class="form-control" name="nama" id="inputNama" placeholder="Nama" value="<?php echo $nama ?>">
+                <div>
+                    <input type="text" class="form-control" name="nama" id="inputNama" placeholder="Nama" value="<?php echo $nama ?>">
+                </div>   
             </div>
             <div class="row mt-1">
                 <label for="inputAlamat" class="form-label fw-bold">
                     Alamat
                 </label>
-                <input type="text" class="form-control" name="alamat" id="inputAlamat" placeholder="Alamat" value="<?php echo $alamat ?>">
+                <div>
+                    <input type="text" class="form-control" name="alamat" id="inputAlamat" placeholder="Alamat" value="<?php echo $alamat ?>">
+                </div>
             </div>
             <div class="row mt-1">
                 <label for="inputNoHp" class="form-label fw-bold">
                     Nomor HP
                 </label>
-                <input type="text" class="form-control" name="no_hp" id="inputNoHp" placeholder="Nomor HP" value="<?php echo $no_hp ?>">
+                <div>
+                    <input type="text" class="form-control" name="no_hp" id="inputNoHp" placeholder="Nomor HP" value="<?php echo $no_hp ?>">
+                </div>
+                
             </div>
-            <!-- menurunkan posisi submit -->
             <div class="row mt-3">
                 <div class = col>
                 <button type="submit" class="btn btn-primary rounded-pill px-3 mt-auto" name="simpan">Simpan</button>
@@ -102,7 +121,6 @@
                     <th scope="col">Nama</th>
                     <th scope="col">Alamat</th>
                     <th scope="col">Nomor HP</th>
-                    <!-- <th scope="col">Status</th> -->
                     <th scope="col">Aksi</th>
                 </tr>
             </thead>
@@ -115,7 +133,7 @@
                     while ($data = mysqli_fetch_array($result)) {
                     ?>
                         <tr>
-                            <td><?php echo $no++ ?></td>
+                            <th scope="row"><?php echo $no++ ?></th>
                             <td><?php echo $data['nama'] ?></td>
                             <td><?php echo $data['alamat'] ?></td>
                             <td><?php echo $data['no_hp'] ?></td>
@@ -131,3 +149,6 @@
         </table>
 </body>
 </html>
+    <?php
+    }
+    ?>

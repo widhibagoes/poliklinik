@@ -1,4 +1,19 @@
 <?php
+    if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
+    if (!isset($_SESSION['username'])) {
+        // Jika pengguna sudah login, tampilkan tombol "Logout"
+        header("Location: index.php?page=loginUser");
+        exit;
+    ?>
+    
+    <?php
+    } else {
+        // Jika pengguna belum login, tampilkan tombol "Login" 
+    ?>
+    <?php
     include_once("koneksi.php");
 
     if (isset($_POST['simpan'])) {
@@ -7,15 +22,17 @@
                                             id_pasien = '" . $_POST['id_pasien'] . "',
                                             id_dokter = '" . $_POST['id_dokter'] . "',
                                             tgl_periksa = '" . $_POST['tgl_periksa'] . "',
-                                            catatan = '" . $_POST['catatan'] . "'
+                                            catatan = '" . $_POST['catatan'] . "',
+                                            obat = '" . $_POST['obat'] . "'
                                             WHERE id = '" . $_POST['id'] . "'");
         } else {
-            $tambah = mysqli_query($mysqli, "INSERT INTO periksa (id_pasien, id_dokter, tgl_periksa, catatan) 
+            $tambah = mysqli_query($mysqli, "INSERT INTO periksa (id_pasien, id_dokter, tgl_periksa, catatan, obat) 
                                             VALUES (
                                                 '" . $_POST['id_pasien'] . "',
                                                 '" . $_POST['id_dokter'] . "',
                                                 '" . $_POST['tgl_periksa'] . "',
-                                                '" . $_POST['catatan'] . "'
+                                                '" . $_POST['catatan'] . "',
+                                                '" . $_POST['obat'] . "'
                                             )");
         }
         echo "<script> 
@@ -32,8 +49,6 @@
                 </script>";
     }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,6 +63,8 @@
 </head>
 
 <body>
+    <h2>Periksa</h2>
+    <br>
     <div class="container">
         <!-- <h1 class="my-5">Pasien</h1> -->
 
@@ -58,6 +75,7 @@
             $id_dokter = '';
             $tgl_periksa = '';
             $catatan = '';
+            $obat = '';
             if (isset($_GET['id'])) {
                 $ambil = mysqli_query($mysqli, "SELECT * FROM periksa WHERE id='" . $_GET['id'] . "'");
                 while ($row = mysqli_fetch_array($ambil)) {
@@ -65,64 +83,85 @@
                     $id_dokter = $row['id_dokter'];
                     $tgl_periksa = $row['tgl_periksa'];
                     $catatan = $row['catatan'];
+                    $obat = $row['obat'];
                 }
             ?>
                 <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
             <?php
             }
             ?>
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="inputPasien" class="sr-only">Pasien</label>
-                <select class="form-control" name="id_pasien">
-                    <option hidden>Pilih Pasien</option>
-                    <?php
-                    $selected = '';
-                    $pasien = mysqli_query($mysqli, "SELECT * FROM pasien");
-                    while ($data = mysqli_fetch_array($pasien)) {
-                        if ($data['id'] == $id_pasien) {
-                            $selected = 'selected="selected"';
-                        } else {
-                            $selected = '';
+            <div class="row">
+                <label for="inputPasien" class="form-label fw-bold">Pasien</label>
+                <div>
+                    <select class="form-control" name="id_pasien">
+                        <option hidden>Pilih Pasien</option>
+                        <?php
+                        $selected = '';
+                        $pasien = mysqli_query($mysqli, "SELECT * FROM pasien");
+                        while ($data = mysqli_fetch_array($pasien)) {
+                            if ($data['id'] == $id_pasien) {
+                                $selected = 'selected="selected"';
+                            } else {
+                                $selected = '';
+                            }
+                        ?>
+                            <option value="<?php echo $data['id'] ?>" <?php echo $selected ?>><?php echo $data['nama'] ?></option>
+                        <?php
                         }
-                    ?>
-                        <option value="<?php echo $data['id'] ?>" <?php echo $selected ?>><?php echo $data['nama'] ?></option>
-                    <?php
-                    }
-                    ?>
-                </select>
-                <label for="inputDokter" class="sr-only">Dokter</label>
-                <select class="form-control" name="id_dokter">
-                    <option hidden>Pilih Dokter</option>
-                    <?php
-                    $selected = '';
-                    $dokter = mysqli_query($mysqli, "SELECT * FROM dokter");
-                    while ($data = mysqli_fetch_array($dokter)) {
-                        if ($data['id'] == $id_dokter) {
-                            $selected = 'selected="selected"';
-                        } else {
-                            $selected = '';
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <label for="inputDokter" class="form-label fw-bold">Dokter</label>
+                <div>
+                    <select class="form-control" name="id_dokter">
+                        <option hidden>Pilih Dokter</option>
+                        <?php
+                        $selected = '';
+                        $dokter = mysqli_query($mysqli, "SELECT * FROM dokter");
+                        while ($data = mysqli_fetch_array($dokter)) {
+                            if ($data['id'] == $id_dokter) {
+                                $selected = 'selected="selected"';
+                            } else {
+                                $selected = '';
+                            }
+                        ?>
+                            <option value="<?php echo $data['id'] ?>" <?php echo $selected ?>><?php echo $data['nama'] ?></option>
+                        <?php
                         }
-                    ?>
-                        <option value="<?php echo $data['id'] ?>" <?php echo $selected ?>><?php echo $data['nama'] ?></option>
-                    <?php
-                    }
-                    ?>
-                </select>
-                <label for="inputTanggal" class="control-label mt-2">Tanggal Periksa</label>
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-1">
+            <label for="inputTanggal" class="form-label fw-bold">Tanggal Periksa</label>
                 <div>
                     <input type="datetime-local" class="form-control" name="tgl_periksa" id="inputTanggal" placeholder="Tanggal Periksa" value="<?php echo $tgl_periksa ?>">
                 </div>
-                <label for="inputCatatan" class="control-label mt-2">Catatan</label>
+            </div>
+            <div class="row mt-1">
+            <label for="inputCatatan" class="form-label fw-bold">Catatan</label>
                 <div>
                     <input type="text" class="form-control" name="catatan" id="inputCatatan" placeholder="Catatan" value="<?php echo $catatan ?>">
                 </div>
+            </div>
+            <div class="row mt-1">
+            <label for="inputObat" class="form-label fw-bold">Obat</label>
                 <div>
-                    <button type="submit" class="btn btn-primary mt-3" name="simpan">Simpan</button>
+                    <input type="text" class="form-control" name="obat" id="inputObat" placeholder="Obat" value="<?php echo $obat ?>">
                 </div>
             </div>
+                
+            <div class="row mt-3">
+                <div class = col>
+                    <button type="submit" class="btn btn-primary rounded-pill px-3 mt-auto" name="simpan">Simpan</button>
+                </div>
+            </div> 
+            </div>
         </form>
-
-
+        <br>
+        <br>
         <!-- Table -->
         <table class="table table-hover">
             <thead>
@@ -132,6 +171,7 @@
                     <th scope="col">Nama Dokter</th>
                     <th scope="col">Tanggal Periksa</th>
                     <th scope="col">Catatan</th>
+                    <th scope="col">Obat</th>
                     <th scope="col">Aksi</th>
                 </tr>
             </thead>
@@ -148,6 +188,7 @@
                         <td><?php echo $data['nama_dokter'] ?></td>
                         <td><?php echo $data['tgl_periksa'] ?></td>
                         <td><?php echo $data['catatan'] ?></td>
+                        <td><?php echo $data['obat'] ?></td>
                         <td>
                             <a class="btn btn-success rounded-pill px-3" href="index.php?page=periksa&id=<?php echo $data['id'] ?>">Ubah</a>
                             <a class="btn btn-danger rounded-pill px-3" href="index.php?page=periksa&id=<?php echo $data['id'] ?>&aksi=hapus">Hapus</a>
@@ -163,3 +204,6 @@
 </body>
 
 </html>
+    <?php
+    }
+    ?>

@@ -1,4 +1,19 @@
 <?php
+    if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
+    if (!isset($_SESSION['username'])) {
+        // Jika pengguna sudah login, tampilkan tombol "Logout"
+        header("Location: index.php?page=loginUser");
+        exit;
+    ?>
+    
+    <?php
+    } else {
+        // Jika pengguna belum login, tampilkan tombol "Login"
+    ?>
+    <?php
     include_once("koneksi.php");
 
     if (isset($_POST['simpan'])) {
@@ -47,6 +62,8 @@
 </head>
 
 <body>
+    <h2>Pasien</h2>
+    <br>
     <div class="container">
         <!-- <h1 class="my-5">Pasien</h1> -->
 
@@ -68,32 +85,32 @@
             <?php
             }
             ?>
-            <div class="form-group">
-                <label for="inputNama" class="control-label mt-2">Nama</label>
+            <div class="row">
+                <label for="inputNama" class="form-label fw-bold">Nama</label>
                 <div>
                     <input type="text" class="form-control" name="nama" id="inputNama" placeholder="Nama" value="<?php echo $nama ?>">
                 </div>
             </div>
-            <div class="form-group">
-                <label for="inputAlamat" class="control-label mt-2">Alamat</label>
+            <div class="row mt-1">
+                <label for="inputAlamat" class="form-label fw-bold">Alamat</label>
                 <div>
                     <input type="text" class="form-control" name="alamat" id="inputAlamat" placeholder="Alamat" value="<?php echo $alamat ?>">
                 </div>
             </div>
-            <div class="form-group">
-                <label for="inputNohp" class="control-label mt-2">No Hp</label>
+            <div class="row mt-1">
+                <label for="inputNohp" class="form-label fw-bold">No Hp</label>
                 <div>
                     <input type="text" class="form-control" name="no_hp" id="inputNohp" placeholder="No HP" value="<?php echo $no_hp ?>">
                 </div>
             </div>
-            <div class="form-group mt-3">
-                <div>
-                    <button type="submit" class="btn btn-primary" name="simpan">Simpan</button>
+            <div class="row mt-3">
+                <div class = col>
+                <button type="submit" class="btn btn-primary rounded-pill px-3 mt-auto" name="simpan">Simpan</button>
                 </div>
-            </div>
+            </div>  
         </form>
-
-
+        <br>
+        <br>
         <!-- Table -->
         <table class="table table-hover">
             <thead>
@@ -132,3 +149,6 @@
 </body>
 
 </html>
+    <?php
+    }
+    ?>
