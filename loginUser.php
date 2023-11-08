@@ -22,16 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['username'] = $username;
             header("Location: index.php");
         } else {
-            echo "<script>
-            alert('Passwor salah'); 
-            document.location='index.php?page=loginUser';
-            </script>";
+            $error = "Password salah";
         }
     } else {
-        echo "<script>
-        alert('User tidak ditemukan'); 
-        document.location='index.php?page=loginUser';
-        </script>";
+        $error = "User tidak ditemukan";
     }
 }
 ?>
@@ -104,6 +98,7 @@ a:hover {
         rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
         crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <?php include_once("koneksi.php"); ?>
@@ -114,14 +109,23 @@ a:hover {
                 <div class="card">
                     <div class="card-header text-center" style="font-weight: bold; font-size: 32px;">Login</div>
                     <div class="card-body">
-                        <form method="POST" action="LoginUser.php">
+                        <form method="POST" action="index.php?page=loginUser">
+                            <?php
+                                if (isset($error)) {
+                                    echo '<div class="alert alert-danger">' . $error . '
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>';
+                                }
+                            ?>
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" name="username" class="form-control" required>
+                                <input type="text" name="username" class="form-control" required placeholder="Masukkan nama anda">
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" name="password" class="form-control" required>
+                                <input type="password" name="password" class="form-control" required placeholder="Masukkan password anda">
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary btn-block">Login</button>

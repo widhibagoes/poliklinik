@@ -27,23 +27,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 alert('Pendaftaran Berhasil'); 
                 document.location='index.php?page=loginUser';
                 </script>";
-            } else {    
-                echo "<script>
-                alert('Pendaftaran gagal'); 
-                document.location='index.php?page=registerUser';
-                </script>";
+            } else {
+                $error = "Pendaftaran gagal";
             }
         } else {
-            echo "<script>
-            alert('Username sudah digunakan'); 
-            document.location='index.php?page=registerUser';
-            </script>";
+            $error = "Username sudah digunakan";
         }
     } else {
-        echo "<script>
-        alert('Password tidak cocok'); 
-        document.location='index.php?page=registerUser';
-        </script>";
+        $error = "Password tidak cocok";
     }
 }
 ?>
@@ -111,6 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
         crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <?php include_once("koneksi.php"); ?>
@@ -121,21 +113,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="card">
                 <div class="card-header text-center" style="font-weight: bold; font-size: 32px;">Register</div>
                     <div class="card-body">
-                        <form method="POST" action="registerUser.php">
+                        <form method="POST" action="index.php?page=registerUser">
+                            <?php
+                                if (isset($error)) {
+                                    echo '<div class="alert alert-danger">' . $error . '
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>';
+                                }
+                            ?>
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" name="username" class="form-control" required>
+                                <input type="text" name="username" class="form-control" required placeholder="Masukkan nama anda">
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" name="password" class="form-control" required>
+                                <input type="password" name="password" class="form-control" required placeholder="Masukkan password">
                             </div>
                             <div class="form-group">
                                 <label for="confirm_password">Confirm Password</label>
-                                <input type="password" name="confirm_password" class="form-control" required>
+                                <input type="password" name="confirm_password" class="form-control" required placeholder="Masukkan password konfirmasi">
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Register</button>
+                                <button type="submit" class="btn btn-primary btn-block">Register</button>
                             </div>
                         </form>
                         <div class="text-center">
