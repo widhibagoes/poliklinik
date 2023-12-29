@@ -33,6 +33,9 @@
                     <li>
                         <a class="dropdown-item" href="index.php?page=pasien">Pasien</a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" href="index.php?page=obat">Obat</a>
+                    </li>
                     </ul>
                 </li>
                 <li class="nav-item">

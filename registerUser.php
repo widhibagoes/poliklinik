@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $insert_query = "INSERT INTO user (username, password) VALUES ('$username', '$hashed_password')";
             if (mysqli_query($mysqli, $insert_query)) {
                 echo "<script>
-                alert('Pendaftaran Berhasil'); 
+                alert('User berhasil ditambahkan'); 
                 document.location='index.php?page=loginUser';
                 </script>";
             } else {
